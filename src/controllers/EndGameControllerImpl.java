@@ -7,7 +7,6 @@ import view.GameView;
 public class EndGameControllerImpl implements EndGameController {
 
     private final View view;
-    private GameView gameV;
 
     public EndGameControllerImpl() {
         this.view = new EndGameViewImpl(this);
@@ -27,6 +26,7 @@ public class EndGameControllerImpl implements EndGameController {
      */
     @Override
     public void restart() {
+        final GameView gameV;
         this.view.exit();
         gameV = new GameView();
         gameV.setup();
@@ -38,6 +38,16 @@ public class EndGameControllerImpl implements EndGameController {
     @Override
     public void setup() {
         this.view.setup();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void backToMenu() {
+        final MainMenuController mainMenuController = new MainMenuControllerImpl();
+        this.view.exit();
+        mainMenuController.setup();
     }
 
 }

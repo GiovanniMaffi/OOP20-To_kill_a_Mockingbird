@@ -7,9 +7,14 @@ import view.ImageLoader;
 
 public class BoxImpl implements Box {
 
+    /**
+     * constant.
+     */
     private static final int MAP_SIZE = 800;
     private static final int BOX_SIZE = 100;
-    //local variables
+    /**
+     * local variables.
+     */
     private ImageLoader imgLoader;
     private double xloc, yloc;
     private double xdir, ydir;
@@ -24,14 +29,12 @@ public class BoxImpl implements Box {
 
     public BoxImpl(final String filename) {
         this.setImage(filename);
-        this.name = filename;
     }
 
     public BoxImpl(final String filename, final double xloc, final double yloc) {
         this.setImage(filename);
-        this.xloc = xloc * BOX_SIZE; 
+        this.xloc = xloc * BOX_SIZE;
         this.yloc = MAP_SIZE - yloc * BOX_SIZE;
-        this.name = filename;
     }
 
     /**
@@ -80,7 +83,7 @@ public class BoxImpl implements Box {
      */
     @Override
     public double getYLoc() {
-        return  this.yloc;
+        return this.yloc;
     }
 
     /**
@@ -112,7 +115,7 @@ public class BoxImpl implements Box {
      */
     @Override
     public double getXDir() {
-        return  this.xdir;
+        return this.xdir;
     }
 
     /**
@@ -120,7 +123,7 @@ public class BoxImpl implements Box {
      */
     @Override
     public double getYDir() {
-        return  this.ydir;
+        return this.ydir;
     }
 
     /**
@@ -144,21 +147,24 @@ public class BoxImpl implements Box {
      * {@inheritDoc}
      */
     @Override
-    public void paint(final Graphics g, final JPanel panel) {
-        //if no image has been uploaded, will be drawn an empy square: otherwise will be drawn a square filled with the image 
-        if (imgLoader == null) {
-            g.drawRect((int) xloc, (int) yloc, BOX_SIZE, BOX_SIZE);
-        } else {
-            g.drawImage(imgLoader.getImage(), (int) xloc, (int) yloc, imgLoader.getImgWidth(), imgLoader.getImgHeight(), null);
-        }
-
+    public int getHeight() {
+        return imgLoader.getImgHeight();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public int getHeight() {
-        return imgLoader.getImgHeight();
+    public void paint(final Graphics g, final JPanel panel) {
+        // if no image has been uploaded, will be drawn an empy square: otherwise will
+        // be drawn a square filled with the image
+        if (imgLoader == null) {
+            g.drawRect((int) xloc, (int) yloc, BOX_SIZE, BOX_SIZE);
+        } else {
+            g.drawImage(imgLoader.getImage(), (int) xloc, (int) yloc, imgLoader.getImgWidth(), imgLoader.getImgHeight(),
+                    null);
+        }
+
     }
+
 }

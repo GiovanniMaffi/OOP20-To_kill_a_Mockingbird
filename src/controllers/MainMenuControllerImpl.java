@@ -7,7 +7,6 @@ import view.MainMenuViewImpl;
 public class MainMenuControllerImpl implements MainMenuController {
 
     private final View view;
-    private GameView gameV;
 
     public MainMenuControllerImpl() {
         this.view = new MainMenuViewImpl(this);
@@ -26,8 +25,21 @@ public class MainMenuControllerImpl implements MainMenuController {
      */
     @Override
     public void newGame() {
+        final GameView gameV;
         this.view.exit();
         gameV = new GameView();
         gameV.setup();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void openShop() {
+        final ShopMenuController shopController = new ShopMenuControllerImpl();
+        this.view.exit();
+        shopController.setup();
+    }
 }
+
+

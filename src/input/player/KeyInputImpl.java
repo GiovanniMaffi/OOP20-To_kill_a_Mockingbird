@@ -8,6 +8,7 @@ import controllers.GameControllerImpl;
 import controllers.InGameMenuController;
 import controllers.InGameMenuControllerImpl;
 import model.player.PlayerMovement;
+import model.upgrades.DoubleSteps;
 import model.player.Directions;
 
 public class KeyInputImpl implements KeyInput {
@@ -33,6 +34,9 @@ public class KeyInputImpl implements KeyInput {
                 if (collisionController.checkDir(Directions.UP) && !gameController.getPause()) {
                     this.player.moveDirection(Directions.UP);
                     gameController.setScore(gameController.getRealScore() + 1);
+                    if (DoubleSteps.getInstance().isPurchased()) {
+                        gameController.setScore(gameController.getRealScore() + 1);
+                    }
                 }
                 break;
 
@@ -40,6 +44,9 @@ public class KeyInputImpl implements KeyInput {
                 if (collisionController.checkDir(Directions.DOWN) && !gameController.getPause()) {
                     this.player.moveDirection(Directions.DOWN);
                     gameController.setScore(gameController.getRealScore() - 1);
+                    if (DoubleSteps.getInstance().isPurchased()) {
+                        gameController.setScore(gameController.getRealScore() - 1);
+                    }
                 }
                 break;
 

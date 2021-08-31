@@ -13,10 +13,10 @@ public class ImageLoader {
      * local variables.
      */
     private BufferedImage img;
-    private String filename = null;
+    private final String filename;
 
     /**
-     * loads the argument passed as an image
+     * loads the argument passed as an image.
      * 
      * @param filename contains the image
      */

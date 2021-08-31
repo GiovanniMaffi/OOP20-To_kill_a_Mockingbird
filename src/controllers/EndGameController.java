@@ -6,4 +6,6 @@ public interface EndGameController extends Controller {
 
     void restart();
 
+    void backToMenu();
+
 }

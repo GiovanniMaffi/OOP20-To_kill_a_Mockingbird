@@ -16,7 +16,11 @@ import model.map.StripImpl;
 import model.player.PlayerMovement;
 import model.player.PlayerMovementImpl;
 import model.score.Coin;
+import model.score.CoinCounter;
 import model.score.CoinImpl;
+import model.upgrades.ScoreBoost;
+import model.upgrades.DoubleCoins;
+import model.upgrades.DoubleSteps;
 import view.GameView;
 
 public class GameControllerImpl implements GameController {
@@ -37,12 +41,16 @@ public class GameControllerImpl implements GameController {
     private static final int SPEED_MOLTIPLICATOR = 30;
     private static final int ADJUST_ON_ROAD = 10;
     private static final int SPAWN_CHARACTER_LINE = 2;
-    private static final int COIN_SPAWN_PROB = 2;
+    private static final int COIN_SPAWN_PROB = 1;
     private static final int CAR_DELAY = 1500;
     private static final int TRAIN_DELAY = 5000;
     private static final int X_SPAWN_PLAYER = 400;
     private static final int Y_SPAWN_PLAYER = 600;
 
+    /**
+     * constants for upgrades.
+     */
+    private static final int SCORE_BOOSTED = 50;
 
     /**
      * local variables.
@@ -64,9 +72,13 @@ public class GameControllerImpl implements GameController {
      * {@inheritDoc}
      */
     public void setup() {
+        if (ScoreBoost.getInstance().isPurchased() && this.score == 0) {
+            this.score = SCORE_BOOSTED;
+            this.realScore = SCORE_BOOSTED;
+        }
         this.player = new PlayerMovementImpl("bird.png", X_SPAWN_PLAYER, Y_SPAWN_PLAYER);
         this.collisionController = new CollisionControllerImpl(this.player);
-        this.input = new KeyInputImpl(this, collisionController); 
+        this.input = new KeyInputImpl(this, collisionController);
     }
 
     /**
@@ -138,15 +150,17 @@ public class GameControllerImpl implements GameController {
         }));
     }
 
-    /** main method for the map movement.
-     * @param allStrips contains all the strips that make up the map.
+    /**
+     * main method for the map movement.
+     * 
+     * @param allStrips      contains all the strips that make up the map.
      * @param vehicleManager
-     * @param cars contains all cars
-     * @param coins contains all coins
-     * @param trains contains all trains
+     * @param cars           contains all cars
+     * @param coins          contains all coins
+     * @param trains         contains all trains
      */
-    public void actionPerformed(final List<ArrayList<Box>> allStrips, final Vehicle vehicleManager, final List<Vehicle> cars, 
-             final List<Coin> coins, final List<Vehicle> trains) {
+    public void actionPerformed(final List<ArrayList<Box>> allStrips, final Vehicle vehicleManager,
+            final List<Vehicle> cars, final List<Coin> coins, final List<Vehicle> trains) {
         if (!pause) {
             this.scrollScreen(allStrips);
             this.startVehicle(vehicleManager, cars, CAR_DELAY);
@@ -156,12 +170,14 @@ public class GameControllerImpl implements GameController {
 
             collisionController.unBlockAll();
 
-            final Optional<Vehicle> car = cars.stream().filter(x -> collisionController.collideWithVehicles(x)).findAny();
+            final Optional<Vehicle> car = cars.stream().filter(x -> collisionController.collideWithVehicles(x))
+                    .findAny();
             if (car.orElse(null) != null) {
                 this.gameOver();
             }
 
-            final Optional<Vehicle> train = trains.stream().filter(x -> collisionController.collideWithVehicles(x)).findAny();
+            final Optional<Vehicle> train = trains.stream().filter(x -> collisionController.collideWithVehicles(x))
+                    .findAny();
             if (train.orElse(null) != null) {
                 this.gameOver();
             }
@@ -169,6 +185,10 @@ public class GameControllerImpl implements GameController {
             final Optional<Coin> coin = coins.stream().filter(x -> collisionController.collideWithCoins(x)).findAny();
             if (coin.orElse(null) != null) {
                 coins.remove(coin.get());
+                CoinCounter.getInstance().incrementCoins();
+                if (DoubleCoins.getInstance().isPurchased()) {
+                    CoinCounter.getInstance().incrementCoins();
+                }
                 player.increaseCoins();
             }
 
@@ -188,8 +208,8 @@ public class GameControllerImpl implements GameController {
      * {@inheritDoc}
      */
     @Override
-    public void spawnVehicle(final List<ArrayList<Box>> allStrips, final List<Vehicle> cars, 
-            final List<Vehicle> trains, final int i) {
+    public void spawnVehicle(final List<ArrayList<Box>> allStrips, final List<Vehicle> cars, final List<Vehicle> trains,
+            final int i) {
         this.carOnRoad(allStrips, cars, i);
         this.trainOnRail(allStrips, trains, i);
     }
@@ -234,9 +254,9 @@ public class GameControllerImpl implements GameController {
     public void setInitialPosition(final List<ArrayList<Box>> allStrip) {
         for (int i = 0; i < NSTRIP_TO_GENERATE; i++) {
             if (i == SPAWN_CHARACTER_LINE || i == SPAWN_CHARACTER_LINE + 1) {
-                allStrip.add(this.striscia.initializeSpecificStrip("Grass.png", i));
+                allStrip.add(this.striscia.getSpecificStrip("Grass.png", i));
             } else {
-                allStrip.add(this.striscia.initializeSpecificStrip("Grass.png", "Tree.png", i));
+                allStrip.add(this.striscia.getSpecificStrip("Grass.png", "Tree.png", i));
             }
         }
     }
@@ -245,11 +265,12 @@ public class GameControllerImpl implements GameController {
      * {@inheritDoc}
      */
     @Override
-    public void generateMap(final List<ArrayList<Box>> allStrip, final List<Vehicle> vehiclesonroad, final List<Vehicle> trains, final List<Coin> coins) {
+    public void generateMap(final List<ArrayList<Box>> allStrip, final List<Vehicle> vehiclesonroad,
+            final List<Vehicle> trains, final List<Coin> coins) {
         final Random rndYLoc = new Random();
         for (int i = 0; i < NSTRIP_TO_GENERATE; i++) {
             if (allStrip.get(i).get(0).getYLoc() > MAP_HIGHER_LIMIT) {
-                allStrip.set(i, this.striscia.initializeRndStrip(GameControllerImpl.NSTRIP_TO_GENERATE));
+                allStrip.set(i, this.striscia.getRndStrip(GameControllerImpl.NSTRIP_TO_GENERATE));
                 this.spawnVehicle(allStrip, vehiclesonroad, trains, i);
 
                 if (rndYLoc.nextInt(COIN_SPAWN_PROB + 1) == COIN_SPAWN_PROB) {
@@ -261,6 +282,7 @@ public class GameControllerImpl implements GameController {
 
     /**
      * TODO explain what this do.
+     * 
      * @param e
      */
     public void keyCatch(final KeyEvent e) {
@@ -306,9 +328,13 @@ public class GameControllerImpl implements GameController {
      * {@inheritDoc}
      */
     public void gameOver() {
+        ScoreBoost.getInstance().setStatus(false);
+        DoubleCoins.getInstance().setStatus(false);
+        DoubleSteps.getInstance().setStatus(false);
         final EndGameController endGame = new EndGameControllerImpl();
         this.setPause();
         endGame.setup();
         this.gameView.exit();
     }
+
 }

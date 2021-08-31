@@ -45,7 +45,6 @@ public class GameView implements KeyListener, View {
      */
     @Override
     public void setup() {
-
         this.panelGame = new PanelGame();
         this.frame = new JFrame();
         this.frame.addKeyListener(this);
@@ -70,13 +69,17 @@ public class GameView implements KeyListener, View {
         private static final int BOXFORSTRIP = 8;
         private static final int TIMER_DELAY = 10;
         private static final int FONT_SIZE = 40;
+        private static final int RECTANGLEXLOC = 10;
+        private static final int RECTANGLEYLOC = 10;
+        private static final int RECTANGLEWIDTH = 30;
+        private static final int RECTANGLEHEIGHT = 30;
 
         /**
          * local variables.
          */
         private final Rectangle rlblCoinCounter;
         private final JLabel lblCoinCounter = new JLabel();
-        private final List<ArrayList<Box>> allStrip = new ArrayList<ArrayList<Box>>();
+        private final ArrayList<ArrayList<Box>> allStrip = new ArrayList<>();
         private final List<Vehicle> vehiclesOnRoad = new ArrayList<>();
         private final List<Vehicle> trains = new ArrayList<>();
         private final Vehicle vehicleManager = new VehicleImpl();
@@ -97,10 +100,10 @@ public class GameView implements KeyListener, View {
             this.repaint();
 
             this.add(lblCoinCounter);
-            lblCoinCounter.setText("Score: 0");
+            lblCoinCounter.setText("Score: " + this.gameController.getRealScore());
             lblCoinCounter.setForeground(Color.white);
             lblCoinCounter.setFont(new Font("Helvetica", Font.ITALIC, FONT_SIZE));
-            rlblCoinCounter = new Rectangle(10, 10, 30, 30);
+            rlblCoinCounter = new Rectangle(RECTANGLEXLOC, RECTANGLEYLOC, RECTANGLEWIDTH, RECTANGLEHEIGHT);
             lblCoinCounter.setBounds(rlblCoinCounter);
 
             this.timer.start();

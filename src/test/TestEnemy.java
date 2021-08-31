@@ -9,7 +9,7 @@ import model.enemy.VehicleType;
 public class TestEnemy {
 
     /**
-     * constants for vehicles
+     * constants for vehicles.
      */
     private static final int VEHICLE_SCROLL = 1;
     private static final int CAR_SPEED = 2;
@@ -23,7 +23,7 @@ public class TestEnemy {
      */
     @org.junit.Test
     public void testCar() {
-        VehicleImpl vehicle = new VehicleImpl();
+        final VehicleImpl vehicle = new VehicleImpl();
         vehicle.initializeCar(4);
         assertEquals(4, vehicle.getVehicle().getYLoc());
         assertEquals(VEHICLE_SCROLL, vehicle.getVehicle().getYDir());
@@ -39,7 +39,7 @@ public class TestEnemy {
      */
     @org.junit.Test
     public void testTrain() {
-        VehicleImpl vehicle = new VehicleImpl();
+        final VehicleImpl vehicle = new VehicleImpl();
         vehicle.initializeTrain(4);
         assertEquals(4, vehicle.getVehicle().getYLoc());
         assertEquals(VEHICLE_SCROLL, vehicle.getVehicle().getYDir());

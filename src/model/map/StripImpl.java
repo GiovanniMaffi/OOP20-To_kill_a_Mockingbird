@@ -30,7 +30,7 @@ public class StripImpl implements Strip {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<Box> initializeRndStrip(final int y) {
+    public ArrayList<Box> getRndStrip(final int y) {
 
         this.boxesStrip = new ArrayList<>();
         final int rndEnv = gen.nextInt(PROBABILITY_OF_STRIPENV);
@@ -44,13 +44,12 @@ public class StripImpl implements Strip {
                 env = StripEnvironment.ROAD;
                 for (int i = 0; i < STRIP_LENGTH; i++) {
                     this.boxesStrip.add(new BoxImpl("Road.png", i, y));
-
                 }
                 break;
 
-        /**
-         * fills the array with rail environment
-         */
+                /**
+                 * fills the array with rail environment
+                 */
             case 1:
                 env = StripEnvironment.RAIL;
                 for (int i = 0; i < STRIP_LENGTH; i++) {
@@ -58,13 +57,13 @@ public class StripImpl implements Strip {
                 }
                 break;
 
-        /**
-         * fills the array with nature environment
-         */
+                /**
+                 * fills the array with nature environment
+                 */
             case 2:
                 env = StripEnvironment.GRASS;
                 for (int i = 0; i < STRIP_LENGTH; i++) {
-                    this.boxesStrip.add(insertBoxObstacles("Grass.png", "Tree.png", i, y));
+                    this.boxesStrip.add(getBoxObstacles("Grass.png", "Tree.png", i, y));
                 }
                 break;
             default:
@@ -77,7 +76,7 @@ public class StripImpl implements Strip {
      * {@inheritDoc}
      */
     @Override
-    public Box insertBoxObstacles(final String background, final String specialBlock, final int x, final int y) {
+    public Box getBoxObstacles(final String background, final String specialBlock, final int x, final int y) {
 
         Box oneBlock;
         final int rand = gen.nextInt(PROBABILITY_OF_SPAWN_OBSTACLE);
@@ -123,7 +122,7 @@ public class StripImpl implements Strip {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<Box> initializeSpecificStrip(final String background, final int y) {
+    public ArrayList<Box> getSpecificStrip(final String background, final int y) {
 
         this.boxesStrip = new ArrayList<>();
         this.setStripEnvironment(background);
@@ -138,12 +137,12 @@ public class StripImpl implements Strip {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<Box> initializeSpecificStrip(final String background, final String specialBlock, final int y) {
+    public ArrayList<Box> getSpecificStrip(final String background, final String specialBlock, final int y) {
 
         this.boxesStrip = new ArrayList<>();
         this.setStripEnvironment(background);
         for (int i = 0; i < STRIP_LENGTH; i++) {
-            this.boxesStrip.add(insertBoxObstacles(background, specialBlock, i, y));
+            this.boxesStrip.add(getBoxObstacles(background, specialBlock, i, y));
         }
         return this.boxesStrip;
     }

@@ -22,7 +22,7 @@ public interface Box extends Model {
     ImageLoader getImage();
 
     /**
-     * returns the name of the specified box.
+     * returns the image name of the specified box.
      * @return a string
      */
     String getName();
