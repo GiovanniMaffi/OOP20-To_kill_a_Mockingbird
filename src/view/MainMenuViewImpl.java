@@ -104,7 +104,7 @@ public class MainMenuViewImpl implements View {
                 controller.openShop();
             });
         }
-    }
+  }
 
     /**
      * {@inheritDoc}

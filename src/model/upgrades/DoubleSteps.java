@@ -1,5 +1,8 @@
 package model.upgrades;
 
+/**
+ * Singleton class that check if the "Double Steps" upgrade has been purchased.
+ */
 public final class DoubleSteps {
     private static DoubleSteps instance;
     private boolean status;

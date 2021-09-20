@@ -1,5 +1,8 @@
 package model.upgrades;
 
+/**
+ * Singleton class that check if the "Score Boost" upgrade has been purchased.
+ */
 public final class ScoreBoost {
     private static ScoreBoost instance;
     private boolean status;

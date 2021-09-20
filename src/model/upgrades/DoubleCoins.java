@@ -1,5 +1,8 @@
 package model.upgrades;
 
+/**
+ * Singleton class that check if the "Double Coins" upgrade has been purchased.
+ */
 public final class DoubleCoins {
     private static DoubleCoins instance;
     private boolean status;

@@ -41,7 +41,7 @@ public class ShopView implements View {
     private static final int COIN_JLABEL_Y = 45;
     private static final int COIN_JLABEL_WIDTH = 130;
     private static final int COIN_JLABEL_HEIGHT = 30;
-    private static final int FONT_SIZE = 20;
+    private static final int FONT_SIZE = 25;
     private static final int FIRST_POWERUP_COST = 10;
     private static final int SECOND_POWERUP_COST = 15;
     private static final int THIRD_POWERUP_COST = 20;
