@@ -3,6 +3,7 @@ package test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import model.player.Player;
 import model.player.PlayerImpl;
+import model.player.Skin;
 
 public class TestPlayer {
 
@@ -14,7 +15,7 @@ public class TestPlayer {
 
     @org.junit.Before
     public void setupMainPlayer() {
-        this.player = new PlayerImpl("bird.png", INITIAL_XLOC, INITIAL_YLOC);
+        this.player = new PlayerImpl(Skin.CHICK, INITIAL_XLOC, INITIAL_YLOC);
     }
 
     @org.junit.Test

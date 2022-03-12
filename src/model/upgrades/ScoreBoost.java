@@ -12,12 +12,11 @@ public final class ScoreBoost {
     }
 
     public static synchronized ScoreBoost getInstance() {
-
         if (instance == null) {
             instance = new ScoreBoost();
         }
 
-        return instance;
+        return instance	;
     }
 
     public void setStatus(final boolean status) {

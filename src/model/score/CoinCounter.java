@@ -6,7 +6,7 @@ package model.score;
 public final class CoinCounter {
 
     private static CoinCounter instance;
-    private int numberOfCoin;
+    private int numberOfCoin = 100;
 
     private CoinCounter() {
     }

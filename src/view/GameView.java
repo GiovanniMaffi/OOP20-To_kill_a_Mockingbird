@@ -20,6 +20,7 @@ import controllers.GameControllerImpl;
 import model.enemy.Vehicle;
 import model.enemy.VehicleImpl;
 import model.map.Box;
+import model.player.Skin;
 import model.score.Coin;
 import model.score.CoinCounter;
 
@@ -40,7 +41,17 @@ public class GameView implements KeyListener, View {
 	private JFrame frame;
 	private PanelGame panelGame;
 	private final GameView gv = this;
+	private Skin skin;
 
+	
+	public GameView() {
+	}
+	
+	public GameView(final Skin skin) {
+		this.skin = skin;
+	}
+	
+	
 	/**
 	 * Create the whole frame.
 	 */
@@ -90,7 +101,7 @@ public class GameView implements KeyListener, View {
 
 		public PanelGame() {
 
-			gameController = new GameControllerImpl(gv);
+			gameController = new GameControllerImpl(gv, skin);
 
 			gameController.setup();
 

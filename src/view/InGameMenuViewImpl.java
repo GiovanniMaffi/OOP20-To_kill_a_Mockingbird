@@ -99,7 +99,8 @@ public class InGameMenuViewImpl implements View {
             });
             controlsButton.addActionListener(e -> {
                 JOptionPane.showMessageDialog(null,
-                        "Arrow Keys:  Move the character." + "\nEsc:  Pause / Resume the game.");
+                		"Arrow Keys:  Move the character."
+        						+ "\nEsc:  Pause / Resume the game." + "\nQ: Trigger ability.");
             });
         }
     }

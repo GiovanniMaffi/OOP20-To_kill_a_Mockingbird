@@ -2,9 +2,14 @@ package controllers;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.stream.Collectors;
 
 import input.player.KeyInput;
 import input.player.KeyInputImpl;
@@ -15,6 +20,7 @@ import model.map.Strip;
 import model.map.StripImpl;
 import model.player.PlayerMovement;
 import model.player.PlayerMovementImpl;
+import model.player.Skin;
 import model.score.Coin;
 import model.score.CoinCounter;
 import model.score.CoinImpl;
@@ -46,6 +52,8 @@ public class GameControllerImpl implements GameController {
 	private static final int TRAIN_DELAY = 5000;
 	private static final int X_SPAWN_PLAYER = 400;
 	private static final int Y_SPAWN_PLAYER = 600;
+	private static final Long TIMER_DELAY_MOCK = 10_000L;
+	private static final Long TIMER_DELAY_JAY = 5_000L;
 
 	/**
 	 * constants for upgrades.
@@ -63,9 +71,14 @@ public class GameControllerImpl implements GameController {
 	private CollisionController collisionController;
 	private KeyInput input;
 	private final GameView gameView;
+	private final Skin skin;
+	private Set<Vehicle> slowedDownVehicles;
+	private boolean slowVehicles;
+	private boolean clearVehicles;
 
-	public GameControllerImpl(final GameView gv) {
+	public GameControllerImpl(final GameView gv, final Skin skin) {
 		this.gameView = gv;
+		this.skin = skin;
 	}
 
 	/**
@@ -76,9 +89,11 @@ public class GameControllerImpl implements GameController {
 			this.score = SCORE_BOOSTED;
 			this.realScore = SCORE_BOOSTED;
 		}
-		this.player = new PlayerMovementImpl("bird.png", X_SPAWN_PLAYER, Y_SPAWN_PLAYER);
+		this.player = new PlayerMovementImpl(X_SPAWN_PLAYER, Y_SPAWN_PLAYER, this.skin);
 		this.collisionController = new CollisionControllerImpl(this.player);
 		this.input = new KeyInputImpl(this, collisionController);
+		this.player.register(this);
+		this.slowedDownVehicles = new HashSet<>();
 	}
 
 	/**
@@ -163,8 +178,30 @@ public class GameControllerImpl implements GameController {
 			final List<Vehicle> cars, final List<Coin> coins, final List<Vehicle> trains) {
 		if (!pause) {
 			this.scrollScreen(allStrips);
-			this.startVehicle(vehicleManager, cars, CAR_DELAY);
-			this.startVehicle(vehicleManager, trains, TRAIN_DELAY);
+
+			if (!this.clearVehicles) {
+				this.startVehicle(vehicleManager, cars, CAR_DELAY);
+				this.startVehicle(vehicleManager, trains, TRAIN_DELAY);
+			} else {
+				trains.clear();
+				cars.clear();
+			}
+
+			if (this.slowVehicles) {
+				final Set<Vehicle> vehiclesToSlowedDown = cars.stream()
+						.filter(car -> !this.slowedDownVehicles.contains(car)).collect(Collectors.toSet());
+				vehiclesToSlowedDown.addAll(trains.stream().filter(car -> !this.slowedDownVehicles.contains(car))
+						.collect(Collectors.toSet()));
+				if (!vehiclesToSlowedDown.isEmpty()) {
+					vehiclesToSlowedDown.forEach(vehicle -> vehicle.setXDir(vehicle.getXDir() / 2));
+					this.slowedDownVehicles.addAll(vehiclesToSlowedDown);
+				}
+
+			} else if (!this.slowedDownVehicles.isEmpty()) {
+				this.slowedDownVehicles.forEach(vehicle -> vehicle.setXDir(vehicle.getXDir() * 2));
+				this.slowedDownVehicles.clear();
+			}
+
 			this.moveMoney(coins);
 			this.player.move();
 
@@ -336,6 +373,36 @@ public class GameControllerImpl implements GameController {
 		this.setPause();
 		endGame.setup();
 		this.gameView.exit();
+	}
+
+	@Override
+	public void update(final Skin s) {
+		switch (s) {
+		case MOCKINGBIRD:
+			this.slowVehicles = true;
+			new Timer().schedule(new TimerTask() {
+				@Override
+				public void run() {
+					slowVehicles = false;
+				}
+			}, TIMER_DELAY_MOCK);
+
+			break;
+
+		case JAY:
+			this.clearVehicles = true;
+			new Timer().schedule(new TimerTask() {
+				@Override
+				public void run() {
+					clearVehicles = false;
+				}
+			}, TIMER_DELAY_JAY);
+			break;
+
+		default:
+			break;
+		}
+
 	}
 
 }

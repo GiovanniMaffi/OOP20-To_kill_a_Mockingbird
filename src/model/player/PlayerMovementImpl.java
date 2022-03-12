@@ -1,14 +1,21 @@
 package model.player;
 
+import java.util.HashSet;
+import java.util.Set;
 
-public class PlayerMovementImpl extends PlayerImpl implements PlayerMovement {
+import controllers.Observer;
+
+public class PlayerMovementImpl extends PlayerImpl implements PlayerMovement, PlayerObservable {
 
     private static final double X_MOVE = 100;
     private static final double Y_MOVE = 100.2;
+    
+	private final Set<Observer> observerSet = new HashSet<>();
+	private final Skin skin;
 
-    public PlayerMovementImpl(final String filename, final double xPos, final double yPos) {
-
-        super(filename, xPos, yPos);
+    public PlayerMovementImpl(final double xPos, final double yPos, final Skin skin) {
+    	super(skin, xPos, yPos);
+        this.skin = skin;
     }
 
     /**
@@ -70,4 +77,22 @@ public class PlayerMovementImpl extends PlayerImpl implements PlayerMovement {
                 break;
         }
     }
+
+	@Override
+	public void register(final Observer obs) {
+		this.observerSet.add(obs);
+	}
+
+	@Override
+	public void notifyObserver() {
+		for (final Observer observer : observerSet) {
+			observer.update(this.skin);
+		}
+	}
+
+	@Override
+	public void triggerAbility() {
+		// TODO Auto-generated method stub
+		this.notifyObserver();
+	}
 }

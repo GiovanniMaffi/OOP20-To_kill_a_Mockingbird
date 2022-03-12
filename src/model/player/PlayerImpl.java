@@ -1,45 +1,50 @@
 package model.player;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import model.map.BoxImpl;
 
 public class PlayerImpl extends BoxImpl implements Player {
 
-    private static final double MAP_SCROLL = 1;
-    private int collectedCoins;
+	private static final double MAP_SCROLL = 1;
+	private static final Map<Skin, String> SKIN_TO_IMAGE = Map.of(Skin.CHICK, "bird.png", Skin.MOCKINGBIRD, "bird2.png",
+			Skin.JAY, "bird3.png");
 
-    public PlayerImpl(final String filename, final double xPos, final double yPos) {
-        setImage(filename);
-        this.setXLoc(xPos);
-        this.setYLoc(yPos);
-        this.setYDir(MAP_SCROLL);
-        this.collectedCoins = 0;
-    }
+	private int collectedCoins;
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int getCoins() {
+	public PlayerImpl(final Skin skin, final double xPos, final double yPos) {
+		setImage(SKIN_TO_IMAGE.get(skin));
+		this.setXLoc(xPos);
+		this.setYLoc(yPos);
+		this.setYDir(MAP_SCROLL);
+		this.collectedCoins = 0;
+	}
 
-        return this.collectedCoins;
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int getCoins() {
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setCoins(final int numberOfCoins) {
+		return this.collectedCoins;
+	}
 
-        this.collectedCoins = numberOfCoins;
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setCoins(final int numberOfCoins) {
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void increaseCoins() {
+		this.collectedCoins = numberOfCoins;
+	}
 
-        this.collectedCoins++;
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void increaseCoins() {
+		this.collectedCoins++;
+	}
 
 }

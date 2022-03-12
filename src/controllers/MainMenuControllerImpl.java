@@ -1,6 +1,5 @@
 package controllers;
 
-import view.GameView;
 import view.View;
 import view.MainMenuViewImpl;
 
@@ -25,10 +24,9 @@ public class MainMenuControllerImpl implements MainMenuController {
      */
     @Override
     public void newGame() {
-        final GameView gameV;
+        final PlayerMenuController playerMenuView = new PlayerMenuControllerImpl();
         this.view.exit();
-        gameV = new GameView();
-        gameV.setup();
+        playerMenuView.setup();
     }
 
     /**

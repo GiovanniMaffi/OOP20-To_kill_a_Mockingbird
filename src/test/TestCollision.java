@@ -9,6 +9,7 @@ import model.enemy.Vehicle;
 import model.enemy.VehicleImpl;
 import model.player.PlayerMovement;
 import model.player.PlayerMovementImpl;
+import model.player.Skin;
 import model.score.Coin;
 import model.score.CoinImpl;
 
@@ -17,7 +18,7 @@ public class TestCollision {
 
     private static final double XPOS = 400.0;
     private static final double YPOS = 600.0;
-    private final PlayerMovement player = new PlayerMovementImpl("bird.png", XPOS, YPOS);
+    private final PlayerMovement player = new PlayerMovementImpl(XPOS, YPOS, Skin.CHICK);
     private final CollisionController cm = new CollisionControllerImpl(player);
     /**
      * Test that verify the correct manageent of collisions with vehicles.

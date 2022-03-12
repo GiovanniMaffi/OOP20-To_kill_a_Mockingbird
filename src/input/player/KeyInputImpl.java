@@ -13,66 +13,74 @@ import model.player.Directions;
 
 public class KeyInputImpl implements KeyInput {
 
-    private final PlayerMovement player;
-    private final InGameMenuController controllerMenu = new InGameMenuControllerImpl();
-    private final GameController gameController;
-    private final CollisionController collisionController;
+	private final PlayerMovement player;
+	private final InGameMenuController controllerMenu = new InGameMenuControllerImpl();
+	private final GameController gameController;
+	private final CollisionController collisionController;
+	private boolean canUseAbility;
 
-    public KeyInputImpl(final GameControllerImpl gameController, final CollisionController cc) {
-        this.player = gameController.getPlayer();
-        this.gameController = gameController;
-        this.collisionController = cc;
-    }
+	public KeyInputImpl(final GameControllerImpl gameController, final CollisionController cc) {
+		this.player = gameController.getPlayer();
+		this.gameController = gameController;
+		this.collisionController = cc;
+		this.canUseAbility = true;
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void command(final KeyEvent event) {
-        switch (event.getKeyCode()) {
-            case KeyEvent.VK_UP: 
-                if (collisionController.checkDir(Directions.UP) && !gameController.getPause()) {
-                    this.player.moveDirection(Directions.UP);
-                    gameController.setScore(gameController.getRealScore() + 1);
-                    if (DoubleSteps.getInstance().isPurchased()) {
-                        gameController.setScore(gameController.getRealScore() + 1);
-                    }
-                }
-                break;
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void command(final KeyEvent event) {
+		switch (event.getKeyCode()) {
+		case KeyEvent.VK_UP:
+			if (collisionController.checkDir(Directions.UP) && !gameController.getPause()) {
+				this.player.moveDirection(Directions.UP);
+				gameController.setScore(gameController.getRealScore() + 1);
+				if (DoubleSteps.getInstance().isPurchased()) {
+					gameController.setScore(gameController.getRealScore() + 1);
+				}
+			}
+			break;
 
-            case KeyEvent.VK_DOWN:
-                if (collisionController.checkDir(Directions.DOWN) && !gameController.getPause()) {
-                    this.player.moveDirection(Directions.DOWN);
-                    gameController.setScore(gameController.getRealScore() - 1);
-                    if (DoubleSteps.getInstance().isPurchased()) {
-                        gameController.setScore(gameController.getRealScore() - 1);
-                    }
-                }
-                break;
+		case KeyEvent.VK_DOWN:
+			if (collisionController.checkDir(Directions.DOWN) && !gameController.getPause()) {
+				this.player.moveDirection(Directions.DOWN);
+				gameController.setScore(gameController.getRealScore() - 1);
+				if (DoubleSteps.getInstance().isPurchased()) {
+					gameController.setScore(gameController.getRealScore() - 1);
+				}
+			}
+			break;
 
-            case KeyEvent.VK_LEFT:
-                if (collisionController.checkDir(Directions.LEFT) && !gameController.getPause()) {
-                    this.player.moveDirection(Directions.LEFT);
-                }
-                break;
+		case KeyEvent.VK_LEFT:
+			if (collisionController.checkDir(Directions.LEFT) && !gameController.getPause()) {
+				this.player.moveDirection(Directions.LEFT);
+			}
+			break;
 
-            case KeyEvent.VK_RIGHT:
-                if (collisionController.checkDir(Directions.RIGHT) && !gameController.getPause()) {
-                    this.player.moveDirection(Directions.RIGHT);
-                }
-                break;
+		case KeyEvent.VK_RIGHT:
+			if (collisionController.checkDir(Directions.RIGHT) && !gameController.getPause()) {
+				this.player.moveDirection(Directions.RIGHT);
+			}
+			break;
 
-            default:
-                break;
-        }
+		case KeyEvent.VK_Q:
+			if (this.canUseAbility) {
+				this.player.triggerAbility();
+				this.canUseAbility = false;
+			}
+			break;
 
-        if (KeyEvent.VK_ESCAPE == event.getKeyCode()) {
+		default:
+			break;
+		}
 
-            gameController.setPause();
-            if (gameController.getPause()) {
-                controllerMenu.setup();
-            }
-        }
-    }
+		if (KeyEvent.VK_ESCAPE == event.getKeyCode()) {
+
+			gameController.setPause();
+			if (gameController.getPause()) {
+				controllerMenu.setup();
+			}
+		}
+	}
 }
-

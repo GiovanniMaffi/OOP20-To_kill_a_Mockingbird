@@ -8,7 +8,7 @@ import model.map.Box;
 import model.player.PlayerMovement;
 import model.score.Coin;
 
-public interface GameController extends Controller {
+public interface GameController extends Controller, Observer {
 
     /**
      * Call move method for the vehicles.
