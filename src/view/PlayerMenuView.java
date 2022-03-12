@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.ActionListener;
@@ -12,16 +11,10 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
-import javax.swing.JOptionPane;
 
 import controllers.PlayerMenuController;
-import controllers.ShopMenuController;
 import model.player.Skin;
-import model.score.CoinCounter;
-import model.upgrades.DoubleCoins;
-import model.upgrades.DoubleSteps;
-import model.upgrades.ScoreBoost;
-import view.ShopView.PanelMenu;
+
 
 public class PlayerMenuView implements View {
 	/**

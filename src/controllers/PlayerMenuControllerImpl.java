@@ -31,7 +31,7 @@ public class PlayerMenuControllerImpl implements PlayerMenuController {
     }
     
 	@Override
-	public void startGame(Skin skin) {
+	public void startGame(final Skin skin) {
 		final GameView gameV = new GameView(skin);
         this.playerView.exit();
         gameV.setup();
